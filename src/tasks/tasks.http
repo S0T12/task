@@ -1,0 +1,27 @@
+### create tasks
+POST http://localhost:3003/tasks
+Content-Type: application/json
+
+{
+    "title": "fix leak information",
+    "time": "50m",
+    "description": "fix leak data for users, problems, ideas and devs"
+}
+
+### findAll tasks
+GET http://localhost:3003/tasks
+
+### findOne task
+GET http://localhost:3003/tasks/1
+
+### update task
+PATCH http://localhost:3003/tasks/1
+Content-Type: application/json
+
+{
+    "title": "",
+    "description": ""
+}
+
+### delete tasks
+DELETE http://localhost:3003/tasks/2

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #121212;
+            color: #dddddd;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .container-fluid {
+            max-width: 100%;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            color: #61dafb;
+            text-align: center;
+        }
+
+        form {
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            background-color: #1e1e1e;
+            color: #dddddd;
+            border: 1px solid #343a40;
+        }
+
+        .list-group-item {
+            border: none;
+            background-color: #292b2c;
+            color: #dddddd;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .task-info {
+            color: #dddddd;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        button:hover {
+            filter: brightness(90%);
+        }
+
+        /* Dark mode styling */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #121212;
+                color: #dddddd;
+            }
+
+            .form-control {
+                background-color: #1e1e1e;
+                color: #dddddd;
+                border: 1px solid #343a40;
+            }
+
+            .list-group-item {
+                border: none;
+                background-color: #292b2c;
+                color: #dddddd;
+            }
+
+            .task-info {
+                background-color: #1e1e1e;
+                padding: 15px;
+                border-radius: 8px;
+                margin-bottom: 20px;
+                color: #dddddd;
+            }
+
+            button:hover {
+                filter: brightness(110%);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <h1 class="mb-4">Task Manager</h1>
+
+        <!-- Form for creating a new task -->
+        <form action="/tasks" method="post">
+            <div class="mb-3">
+                <label for="title" class="form-label">Title:</label>
+                <input type="text" class="form-control" id="title" name="title" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="description" class="form-label">Description:</label>
+                <input type="text" class="form-control" id="description" name="description" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="time" class="form-label">Time:</label>
+                <input type="text" class="form-control" id="time" name="time" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Create Task</button>
+        </form>
+
+        <!-- Display existing tasks -->
+        <h2 class="mb-3">Tasks</h2>
+        <ul class="list-group">
+            <% tasks.forEach(task => { %>
+                <li class="list-group-item">
+                    <div class="task-info">
+                        <strong><%= task.title %></strong>
+                        <p><%= task.description %></p>
+                        <p>Time: <%= task.time %></p>
+                        <p>Created at: <%= task.createdAt %></p>
+                        <p>Updated at: <%= task.updatedAt %></p>
+                        <% if (task.completedAt) { %>
+                            <p>Completed at: <%= task.completedAt %></p>
+                        <% } %>
+                        <% if (task.canceledAt) { %>
+                            <p>Canceled at: <%= task.canceledAt %></p>
+                        <% } %>
+                    </div>
+
+                    <!-- Form for updating a task -->
+                    <form action="/tasks/<%= task.id %>?_method=PATCH" method="POST">
+                        <div class="mb-3">
+                            <label for="updateTitle" class="form-label">Update Title:</label>
+                            <input type="text" class="form-control" id="updateTitle" name="title" value="Updated Task Title" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="updateDescription" class="form-label">Update Description:</label>
+                            <input type="text" class="form-control" id="updateDescription" name="description" value="Updated Task Description" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="updateTime" class="form-label">Update Time:</label>
+                            <input type="text" class="form-control" id="updateTime" name="time" value="Updated Task Time" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="completedAt" class="form-label">Completed At:</label>
+                            <input type="text" class="form-control" id="completedAt" name="completedAt" value="2023-11-17T12:00:00Z">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="canceledAt" class="form-label">Canceled At:</label>
+                            <input type="text" class="form-control" id="canceledAt" name="canceledAt" value="2023-11-18T15:30:00Z">
+                        </div>
+
+                        <button type="submit" class="btn btn-warning" onclick="convertDates()">Update Task</button>
+                    </form>
+
+                    <!-- Form for deleting a task -->
+                    <form action="/tasks/<%= task.id %>?_method=DELETE" method="POST">
+                        <button type="submit" class="btn btn-danger">Delete Task</button>
+                    </form>
+                </li>
+            <% }); %>
+        </ul>
+    </div>
+
+    <!-- Bootstrap JS and jQuery (Make sure to include these scripts) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
